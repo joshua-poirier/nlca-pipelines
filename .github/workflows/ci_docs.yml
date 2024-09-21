@@ -60,16 +60,3 @@ jobs:
       # Deploy documentation to GitHub Pages
       - name: Deploy documentation
         uses: actions/deploy-pages@v4
-
-  # Create release
-  release:
-    needs: deploy
-    runs-on: ubuntu-latest
-    environment: Actions CI
-
-    steps:
-      # Run Semantic Release to get versioning and changelog
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v4
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
