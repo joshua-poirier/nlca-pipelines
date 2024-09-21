@@ -1,0 +1,24 @@
+# Run this CI Workflow on merges to the `main` branch
+name: Merge CI
+on:
+  push:
+    branches:
+      - main
+
+# Security permissions
+permissions:
+  contents: read
+
+jobs:
+  # Create release
+  release:
+    needs: deploy
+    runs-on: ubuntu-latest
+    environment: build
+
+    steps:
+      # Run Semantic Release to get versioning and changelog
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}

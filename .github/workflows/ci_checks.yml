@@ -1,0 +1,43 @@
+# Run this CI Workflow on pull requests to the `main` branch
+name: Pull Request CI
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - main
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    environment: build
+
+    steps:
+      # Checkout code
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+
+      # Setup virtual environment, install dependencies
+      - name: Setup Virtual Environment
+        run: make init
+
+      # Run lint checks (Pylint, Flake8)
+      - name: Run lint checks
+        run: make lint
+      
+      # Run format checks (isort, black)
+      - name: Run format checks
+        run: make check_format
+      
+      # Run type checks (mypy)
+      - name: Run type checks
+        run: make check_type
+
+      # Run unit tests (pytest)
+      - name: Run unit tests
+        run: make test

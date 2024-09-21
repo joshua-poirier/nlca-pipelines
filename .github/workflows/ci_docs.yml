@@ -1,0 +1,62 @@
+# Run this CI Workflow on merges to the `main` branch
+name: Merge CI
+on:
+  push:
+    branches:
+      - main
+
+# Security permissions (enabling write access for Github-Pages)
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # Create and upload documentation
+  build-docs:
+    runs-on: ubuntu-latest
+    environment: build
+
+    steps:
+      # Checkout code
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+
+      # Setup virtual environment, install dependencies
+      - name: Setup Virtual Environment
+        run: make init
+
+      # Create documentation using pdoc
+      - name: Create documentation
+        run: make docs
+
+      # Upload documentation to docs folder
+      - name: Upload documentation
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: ./docs
+
+  # Deploy documentation to Github Pages
+  deploy:
+    needs: build-docs
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+
+    steps:
+      # Deploy documentation to GitHub Pages
+      - name: Deploy documentation
+        uses: actions/deploy-pages@v4
