@@ -4,6 +4,7 @@
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat)](https://pycqa.github.io/isort/)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Code Checks](https://github.com/joshua-poirier/nlca-pipelines/actions/workflows/ci_checks.yml/badge.svg?branch=main)](https://github.com/joshua-poirier/nlca-pipelines/actions/workflows/ci_checks.yml)
 
 ## Coding Assignment
 This coding assignment is an application that processes and validates an input file and
