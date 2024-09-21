@@ -28,4 +28,4 @@ test:
 
 .PHONY: docs
 docs:
-	pipenv run pdoc -d google -o docs --math nlca_pipelines nlca_pipelines.__main__
+	pipenv run pdoc -d google -o docs --math nlca_pipelines
