@@ -1,3 +1,9 @@
 [tool.black]
 skip-string-normalization = true
 line-length = 88
+
+[tool.coverage.run]
+omit = [
+    # omit dunder files, __init__.py, __main__.py, etc.
+    "__*__.py",
+]
