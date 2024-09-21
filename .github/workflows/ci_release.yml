@@ -12,7 +12,6 @@ permissions:
 jobs:
   # Create release
   release:
-    needs: deploy
     runs-on: ubuntu-latest
     environment: build
 
