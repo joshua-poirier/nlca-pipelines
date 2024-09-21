@@ -9,7 +9,7 @@ on:
 jobs:
   checks:
     runs-on: ubuntu-latest
-    environment: Actions CI
+    environment: build
 
     steps:
       # Checkout code

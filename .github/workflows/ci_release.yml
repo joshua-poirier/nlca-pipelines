@@ -14,7 +14,7 @@ jobs:
   release:
     needs: deploy
     runs-on: ubuntu-latest
-    environment: Actions CI
+    environment: build
 
     steps:
       # Run Semantic Release to get versioning and changelog

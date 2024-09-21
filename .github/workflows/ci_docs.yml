@@ -15,7 +15,7 @@ jobs:
   # Create and upload documentation
   build-docs:
     runs-on: ubuntu-latest
-    environment: Actions CI
+    environment: build
 
     steps:
       # Checkout code
