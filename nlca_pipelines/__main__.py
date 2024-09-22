@@ -9,7 +9,6 @@ Running example command.
 
 import os
 
-import boto3
 import click
 import pandas as pd
 from data_access.sources import GoogleDriveClient, S3Client
