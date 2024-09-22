@@ -103,6 +103,7 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
             "eliminate_invalid_values",
             "impute_with_mean",
             "impute_with_mode",
+            "sort",
         ],
         options={
             "cols_to_filter_missing": ["api10"],
@@ -131,7 +132,8 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
                 "subbasin",
                 "state",
                 "county",
-            ]
+            ],
+            "cols_to_sort_by": ["api10"],
         },
     )
     silver_df = silver_pipeline.run(df=bronze_df)
