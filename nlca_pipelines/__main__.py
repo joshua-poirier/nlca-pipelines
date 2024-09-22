@@ -97,8 +97,22 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
 
     # create and run silver pipeline
     silver_pipeline = SilverPipeline(
-        steps=["parse_json", "filter_missing"],
-        options={"cols_to_filter_missing": ["api10"]},
+        steps=["parse_json", "filter_missing", "eliminate_invalid_values"],
+        options={
+            "cols_to_filter_missing": ["api10"],
+            "cols_to_elim_invalid_values": [
+                "direction",
+                "welltype",
+                "basin",
+                "subbasin",
+                "state",
+                "county",
+                "spuddate",
+                "cum12moil",
+                "cum12mgas",
+                "cum12mwater",
+            ],
+        },
     )
     silver_df = silver_pipeline.run(df=bronze_df)
 
