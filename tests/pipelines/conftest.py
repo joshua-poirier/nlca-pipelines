@@ -1,6 +1,7 @@
 # pylint: disable=bad-staticmethod-argument
 # ^^^ Due to known pylint issue: https://github.com/pylint-dev/pylint/issues/5441
 
+from datetime import datetime
 from typing import (
     Any,
     Dict,
@@ -11,6 +12,7 @@ from typing import (
 import pandas as pd
 import pytest
 
+from nlca_pipelines.pipelines import BronzePipeline
 from nlca_pipelines.pipelines._base import BasePipeline
 from nlca_pipelines.validation import validate
 
@@ -90,3 +92,27 @@ def fixture_sample_pipeline():
 def fixture_df() -> pd.DataFrame:
     """Reusable dataframe as a fixture."""
     return pd.DataFrame({"name": ["Alice Amore", "Bob Bogart"], "age": [5, 7]})
+
+
+@pytest.fixture(name="bronze_df")
+def fixture_bronze_df(df: pd.DataFrame) -> pd.DataFrame:
+    """Reusable bronze-tier dataframe as a fixture."""
+    bronze_pipeline = BronzePipeline(
+        steps=[
+            "serialize_rows",
+            "add_source_name",
+            "add_source_uri",
+            "add_row_number",
+            "add_source_updated_at",
+            "add_id",
+        ],
+        options={
+            "skiprows": 1,
+            "source_created_at": datetime.now().strftime("%Y-%m-%d"),
+            "source_name": "somefile.zip",
+            "source_uri": "https://google.com/somefile.zip",
+            "source_updated_at": datetime.now().strftime("%Y-%m-%d"),
+        },
+    )
+
+    return bronze_pipeline.run(df=df)
