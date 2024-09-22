@@ -101,8 +101,8 @@ class SilverPipeline(BasePipeline):
         # pylint: disable=cell-var-from-loop
         for col in self.options["cols_to_elim_invalid_values"]:
             # retrieve the validator object for the column
-            validator: Callable = getattr(values, col.capitalize())
-            if not validator:
+            validator: Optional[Callable] = getattr(values, col.capitalize())
+            if validator is None:
                 raise ValueError(f"No matching validator for '{col}'.")
 
             # apply the validator to all rows
