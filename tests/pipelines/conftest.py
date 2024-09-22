@@ -21,6 +21,7 @@ class SamplePipeline(BasePipeline):
     It is derived from the `BasePipeline` and intended for use testing
     the `BasePipeline`'s features.
     """
+
     def __init__(
         self,
         steps: Optional[List[str]] = None,
