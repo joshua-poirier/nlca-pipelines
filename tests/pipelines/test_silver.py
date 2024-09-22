@@ -52,6 +52,12 @@ def test_filter_missing(bronze_df: pd.DataFrame) -> None:
         pytest.param("cum12moil", "44697", 44697),
         pytest.param("cum12moil", "seventten", None),
         pytest.param("cum12moil", "", None),
+        pytest.param("cum12mgas", "44697", 44697),
+        pytest.param("cum12mgas", "seventten", None),
+        pytest.param("cum12mgas", "", None),
+        pytest.param("cum12mwater", "44697", 44697),
+        pytest.param("cum12mwater", "seventten", None),
+        pytest.param("cum12mwater", "", None),
     ],
 )
 def test_eliminate_invalid_values(col: str, value: str, expected: str) -> None:
