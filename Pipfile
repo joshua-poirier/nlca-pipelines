@@ -19,7 +19,7 @@ pandas = "==2.2.2"
 click = "==8.1.7"
 pydantic = "==2.9.0"
 pydantic-settings = "==2.4.0"
-data-access = {git = "https://github.com/joshua-poirier/data-access.git", editable = true, ref = "v1.1.9"}
+data-access = {git = "https://github.com/joshua-poirier/data-access.git", editable = true, ref = "v1.2.0"}
 
 [requires]
 python_version = "3.10"
