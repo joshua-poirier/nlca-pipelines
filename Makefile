@@ -19,8 +19,8 @@ check_format:
 
 .PHONY: check_type
 check_type:
-	pipenv run python -m mypy nlca_pipelines
-	pipenv run python -m mypy tests
+	pipenv run python -m mypy nlca_pipelines --install-types --non-interactive
+	pipenv run python -m mypy tests --install-types --non-interactive
 
 .PHONY: format
 format:
