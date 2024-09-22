@@ -75,7 +75,7 @@ def validate(
     required_opts = required_opts or []
 
     def inner(
-        func: Callable[[Any, pd.DataFrame], pd.DataFrame]
+        func: Callable[[Any, pd.DataFrame], pd.DataFrame],
     ) -> Callable[[Any, pd.DataFrame], pd.DataFrame]:
         """Validates the input before calling the decorated function.
 

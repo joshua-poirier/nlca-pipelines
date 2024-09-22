@@ -1,4 +1,12 @@
-from typing import Any, Dict, List, Optional
+# pylint: disable=missing-class-docstring,missing-function-docstring
+# pylint: disable=too-few-public-methods
+
+from typing import (
+    Any,
+    Dict,
+    List,
+    Optional,
+)
 
 import pandas as pd
 import pytest
@@ -6,8 +14,8 @@ import pytest
 from nlca_pipelines.validation import validate
 
 
-@pytest.fixture
-def df() -> pd.DataFrame:
+@pytest.fixture(name="df")
+def fixture_df() -> pd.DataFrame:
     """Reusable dataframe as a fixture."""
     return pd.DataFrame({"name": ["Alice", "Bob"], "age": [5, 7]})
 
@@ -34,7 +42,7 @@ def test_validate_decorator_preserves_args(kwargs: Dict[str, Any]) -> None:
     @validate(**kwargs)
     def func(df: pd.DataFrame) -> pd.DataFrame:
         return df
-    
+
     for key, value in kwargs.items():
         assert getattr(func, key) == value
 
@@ -68,7 +76,7 @@ def test_validate_decorator_raises_for_unexpected_args(kwargs: Dict[str, Any]) -
 
 
 def test_validate_decorator_raises_when_staticmethod_given_required_opts(
-    df: pd.DataFrame
+    df: pd.DataFrame,
 ) -> None:
     """Test that the validate decorator raises when required_opts are
     given to a staticmethod.
@@ -78,6 +86,7 @@ def test_validate_decorator_raises_when_staticmethod_given_required_opts(
     as an attribute of the instance and not the class; thereby, making
     them unavailable to static methods.
     """
+
     class A:
         @validate(required_opts=["a"])
         @staticmethod
@@ -91,7 +100,7 @@ def test_validate_decorator_raises_when_staticmethod_given_required_opts(
 
 
 def test_validate_decorator_raises_when_instance_method_missing_required_cols(
-    df: pd.DataFrame
+    df: pd.DataFrame,
 ) -> None:
     """Test that the decorator raises for missing required columns.
 
@@ -99,6 +108,7 @@ def test_validate_decorator_raises_when_instance_method_missing_required_cols(
     ValueError when required columns are missing from the input
     dataframe.
     """
+
     # pylint: disable=bad-staticmethod-argument,unused-argument
     class A:
         @validate(required_cols=["first_name"])
@@ -115,7 +125,7 @@ def test_validate_decorator_raises_when_instance_method_missing_required_cols(
 
 
 def test_validate_decorator_raises_when_static_method_missing_required_cols(
-    df: pd.DataFrame
+    df: pd.DataFrame,
 ) -> None:
     """Test that the decorator raises for missing required columns.
 
@@ -123,11 +133,15 @@ def test_validate_decorator_raises_when_static_method_missing_required_cols(
     ValueError when required columns are missing from the input
     dataframe.
     """
+
+    # pylint: disable=bad-staticmethod-argument,unused-argument
     class A:
         @validate(required_cols=["first_name"])
         @staticmethod
-        def func(self, df: pd.DataFrame) -> pd.DataFrame:
+        def func(df: pd.DataFrame) -> pd.DataFrame:
             return df
+
+    # pylint: enable=bad-staticmethod-argument,unused-argument
 
     with pytest.raises(ValueError) as exc_info:
         A().func(df=df)
@@ -136,7 +150,7 @@ def test_validate_decorator_raises_when_static_method_missing_required_cols(
 
 
 def test_validate_decorator_raises_when_instance_method_missing_required_opts(
-    df: pd.DataFrame
+    df: pd.DataFrame,
 ) -> None:
     """Test that the validate decorator raises when required options are
     missing.
@@ -144,6 +158,7 @@ def test_validate_decorator_raises_when_instance_method_missing_required_opts(
     The validate decorator should raise a ValueError when required
     options are missing from the pipeline instance.
     """
+
     # pylint: disable=bad-staticmethod-argument,unused-argument
     class A:
         def __init__(
