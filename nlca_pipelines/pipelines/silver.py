@@ -1,11 +1,15 @@
 # pylint: disable=bad-staticmethod-argument
 # ^^^ Due to known pylint issue: https://github.com/pylint-dev/pylint/issues/5441
 
-from typing import List, Optional
+from typing import (
+    Callable,
+    List,
+    Optional,
+)
 
 import pandas as pd
 
-from ..validation import validate
+from ..validation import validate, values
 from ._base import BasePipeline
 from .options import SilverPipelineOptionsDict
 
@@ -65,6 +69,12 @@ class SilverPipeline(BasePipeline):
 
         Some rows **must** have values in order to be valid. Here, we
         filter rows with missing/empty values.
+
+        Args:
+            df (pd.DataFrame): Inpput data.
+
+        Returns:
+            pd.DataFrame: Output data, having invalid rows filtered out.
         """
         # filter out nulls
         df = df.dropna(subset=self.options["cols_to_filter_missing"])
@@ -72,5 +82,33 @@ class SilverPipeline(BasePipeline):
         # filter out empty strings
         for col in self.options["cols_to_filter_missing"]:
             df = df[df[col] != ""]
+
+        return df
+
+    def eliminate_invalid_values(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Eliminate invalid values.
+
+        If a value is not the correct type, replace it with a null
+        value.
+
+        Args:
+            df (pd.DataFrame): Input data.
+
+        Returns:
+            pd.DataFrame: Output data, with the relevant columns having
+                invalid values replaced with nulls.
+        """
+        # pylint: disable=cell-var-from-loop
+        for col in self.options["cols_to_elim_invalid_values"]:
+            # retrieve the validator object for the column
+            validator: Callable = getattr(values, col.capitalize())
+            if not validator:
+                raise ValueError(f"No matching validator for '{col}'.")
+
+            # apply the validator to all rows
+            df[col] = df[col].apply(
+                lambda x: getattr(validator(**{col.lower(): x}), col.lower()),
+            )
+        # pylint: enable=cell-var-from-loop
 
         return df

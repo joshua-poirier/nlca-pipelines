@@ -24,3 +24,29 @@ def test_filter_missing(bronze_df: pd.DataFrame) -> None:
 
     assert "empty_col" in actual.columns
     assert actual.shape[0] == 0
+
+
+@pytest.mark.parametrize(
+    "col, value, expected",
+    [
+        pytest.param("direction", "Horizontal", "HORIZONTAL"),
+        pytest.param("direction", "horizontal", "HORIZONTAL"),
+        pytest.param("direction", "VERTICAL", "VERTICAL"),
+        pytest.param("direction", "invalid", None),
+        pytest.param("direction", "", None),
+        pytest.param("welltype", "oil", "OIL"),
+        pytest.param("welltype", "Gas ", "GAS"),
+        pytest.param("basin", "Anadarko", "ANADARKO"),
+        pytest.param("basin", "PERMIAN ", "PERMIAN"),
+    ],
+)
+def test_eliminate_values(col: str, value: str, expected: str) -> None:
+    """Testing the `eliminate_invalid_values` method."""
+    df: pd.DataFrame = pd.DataFrame({col: [value]})
+    pipeline = SilverPipeline(
+        steps=["eliminate_invalid_values"],
+        options={"cols_to_elim_invalid_values": [col]},
+    )
+    actual: pd.DataFrame = pipeline.run(df=df)
+
+    assert actual[col].iloc[0] == expected
