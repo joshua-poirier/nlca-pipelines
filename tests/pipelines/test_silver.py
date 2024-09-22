@@ -46,6 +46,9 @@ def test_filter_missing(bronze_df: pd.DataFrame) -> None:
         pytest.param("state", "oklahoma ", None),
         pytest.param("county", "pecos", "PECOS"),
         pytest.param("county", "invalid", None),
+        pytest.param("spuddate", "2023-07-01", "2023-07-01"),
+        pytest.param("spuddate", "2033-07-01", None),
+        pytest.param("spuddate", "invalid", None),
     ],
 )
 def test_eliminate_invalid_values(col: str, value: str, expected: str) -> None:
