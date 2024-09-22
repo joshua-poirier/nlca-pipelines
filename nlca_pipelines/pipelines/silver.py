@@ -1,4 +1,4 @@
-# pylint: disable=bad-staticmethod-argument
+# pylint: disable=bad-staticmethod-argument,cell-var-from-loop
 # ^^^ Due to known pylint issue: https://github.com/pylint-dev/pylint/issues/5441
 
 from typing import (
@@ -99,7 +99,6 @@ class SilverPipeline(BasePipeline):
             pd.DataFrame: Output data, with the relevant columns having
                 invalid values replaced with nulls.
         """
-        # pylint: disable=cell-var-from-loop
         for col in self.options["cols_to_elim_invalid_values"]:
             # retrieve the validator object for the column
             validator: Optional[Callable] = getattr(values, col.capitalize())
@@ -110,6 +109,23 @@ class SilverPipeline(BasePipeline):
             df[col] = df[col].apply(
                 lambda x: getattr(validator(**{col.lower(): x}), col.lower()),
             )
-        # pylint: enable=cell-var-from-loop
+
+        return df
+
+    def impute_with_mean(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Impute missing values with the mean value.
+
+        Replace missing values in each column with the mean value of
+        that column.
+
+        Args:
+            df (pd.DataFrame): Input data.
+
+        Returns:
+            pd.DataFrame: Output data, with missing values imputed with
+                the mean for the relevant columns
+        """
+        for col in self.options["cols_to_impute_with_mean"]:
+            df[col] = df[col].fillna(df[col].mean())
 
         return df

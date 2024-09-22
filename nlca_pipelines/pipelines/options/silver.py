@@ -11,7 +11,10 @@ class SilverPipelineOptionsDict(TypedDict, total=False):
             eliminate invalid values for.
         cols_to_filter_missing (List[str]): List of columns to filter
             out all rows with missing values.
+        cols_to_impute_with_mean (List[str]): List of columns to impute
+            missing values with the mean.
     """
 
     cols_to_elim_invalid_values: List[str]
     cols_to_filter_missing: List[str]
+    cols_to_impute_with_mean: List[str]

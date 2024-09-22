@@ -70,3 +70,17 @@ def test_eliminate_invalid_values(col: str, value: str, expected: str) -> None:
     actual: pd.DataFrame = pipeline.run(df=df)
 
     assert actual[col].iloc[0] == expected
+
+
+@pytest.mark.parametrize("col, expected", [("A", 3), ("B", 7)])
+def test_impute_with_mean(col: str, expected: int) -> None:
+    """Testing the `impute_with_mean` method."""
+    df: pd.DataFrame = pd.DataFrame({"A": [1, 2, None, 6], "B": [5, 7, None, 9]})
+    pipeline = SilverPipeline(
+        steps=["impute_with_mean"],
+        options={"cols_to_impute_with_mean": ["A", "B"]},
+    )
+
+    actual: pd.DataFrame = pipeline.run(df=df)
+
+    assert actual[col].iloc[2] == expected
