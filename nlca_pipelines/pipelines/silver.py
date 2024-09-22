@@ -85,6 +85,7 @@ class SilverPipeline(BasePipeline):
 
         return df
 
+    @validate(required_opts=["cols_to_elim_invalid_values"])
     def eliminate_invalid_values(self, df: pd.DataFrame) -> pd.DataFrame:
         """Eliminate invalid values.
 
