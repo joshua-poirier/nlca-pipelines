@@ -32,6 +32,7 @@ class Basin(BaseModel):
             EAGLEFORD = "eagle ford"
             OTHER = "other"
             PERMIAN = "permian"
+
         # pylint: enable=missing-class-docstring
 
         # sanitizing input string
@@ -41,7 +42,7 @@ class Basin(BaseModel):
         basin: Optional[str] = None
         try:
             # sanitize valid values
-            basin = BasinEnum(v).name
+            basin = BasinEnum(v).value.upper()
         except ValueError:
             pass
 

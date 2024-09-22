@@ -29,6 +29,7 @@ class Direction(BaseModel):
         class DirectionEnum(Enum):
             HORIZONTAL = "horizontal"
             VERTICAL = "vertical"
+
         # pylint: enable=missing-class-docstring
 
         # sanitizing input string
@@ -38,7 +39,7 @@ class Direction(BaseModel):
         direction: Optional[str] = None
         try:
             # sanitize valid values
-            direction = DirectionEnum(v).name
+            direction = DirectionEnum(v).value.upper()
         except ValueError:
             pass
 

@@ -29,6 +29,7 @@ class Welltype(BaseModel):
         class WelltypeEnum(Enum):
             GAS = "gas"
             OIL = "oil"
+
         # pylint: enable=missing-class-docstring
 
         # sanitizing input string
@@ -38,7 +39,7 @@ class Welltype(BaseModel):
         welltype: Optional[str] = None
         try:
             # sanitize valid values
-            welltype = WelltypeEnum(v).name
+            welltype = WelltypeEnum(v).value.upper()
         except ValueError:
             pass
 
