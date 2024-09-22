@@ -123,9 +123,27 @@ class SilverPipeline(BasePipeline):
 
         Returns:
             pd.DataFrame: Output data, with missing values imputed with
-                the mean for the relevant columns
+                the mean for the relevant columns.
         """
         for col in self.options["cols_to_impute_with_mean"]:
             df[col] = df[col].fillna(df[col].mean())
+
+        return df
+
+    def impute_with_mode(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Impute missing values with the mode value.
+
+        Replace missing values in each column with the mode value of
+        that column (the most common value).
+
+        Args:
+            df (pd.DataFrame): Input data.
+
+        Returns:
+            pd.DataFrame: Output data, with missing values imputed with
+                the mode for the relevant columns.
+        """
+        for col in self.options["cols_to_impute_with_mode"]:
+            df[col] = df[col].fillna(df[col].mode()[0])
 
         return df

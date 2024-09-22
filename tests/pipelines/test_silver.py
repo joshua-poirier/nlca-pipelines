@@ -86,3 +86,16 @@ def test_impute_with_mean(col: str, expected: int) -> None:
     actual: pd.DataFrame = pipeline.run(df=df)
 
     assert actual[col].iloc[2] == expected
+
+
+def test_impute_with_mode() -> None:
+    """Testing the `impute_with_mode` method."""
+    df: pd.DataFrame = pd.DataFrame({"A": [1, 2, 1, 2, 1, 2, 3, None]})
+    pipeline = SilverPipeline(
+        steps=["impute_with_mode"],
+        options={"cols_to_impute_with_mode": ["A"]},
+    )
+
+    actual: pd.DataFrame = pipeline.run(df=df)
+
+    assert actual["A"].iloc[7] == 1
