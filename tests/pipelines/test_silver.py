@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pandas as pd
 import pytest
 
@@ -46,7 +48,7 @@ def test_filter_missing(bronze_df: pd.DataFrame) -> None:
         pytest.param("state", "oklahoma ", None),
         pytest.param("county", "pecos", "PECOS"),
         pytest.param("county", "invalid", None),
-        pytest.param("spuddate", "2023-07-01", "2023-07-01"),
+        pytest.param("spuddate", "2023-07-01", datetime(2023, 7, 1)),
         pytest.param("spuddate", "2033-07-01", None),
         pytest.param("spuddate", "invalid", None),
         pytest.param("cum12moil", "44697", 44697),
