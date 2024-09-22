@@ -13,7 +13,7 @@ import click
 import pandas as pd
 from data_access.sources.google_drive import GoogleDriveClient
 
-from .pipelines import BronzePipeline
+from .pipelines import BronzePipeline, SilverPipeline
 
 
 @click.group(name="cli")
@@ -65,10 +65,15 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
     """
     # stream data into dataframe
     client = GoogleDriveClient(
-        io_options={"encoding": "utf-8", "header": 0, "dtype": str}
+        io_options={
+            "encoding": "utf-8",
+            "header": 0,
+            "dtype": str,
+            "keep_default_na": False,
+        }
     )
     client.get_file_id(filename=input_filename)
-    df: pd.DataFrame = client.read()
+    raw_df: pd.DataFrame = client.read()
 
     # create and run bronze pipeline
     bronze_pipeline = BronzePipeline(
@@ -88,12 +93,56 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
             "source_updated_at": client.source_updated_at,
         },
     )
-    bronze_df = bronze_pipeline.run(df=df)
+    bronze_df = bronze_pipeline.run(df=raw_df)
+
+    # create and run silver pipeline
+    silver_pipeline = SilverPipeline(
+        steps=[
+            "parse_json",
+            "filter_missing",
+            "eliminate_invalid_values",
+            "impute_with_mean",
+            "impute_with_mode",
+            "sort",
+        ],
+        options={
+            "cols_to_filter_missing": ["api10"],
+            "cols_to_elim_invalid_values": [
+                "direction",
+                "welltype",
+                "basin",
+                "subbasin",
+                "state",
+                "county",
+                "spuddate",
+                "cum12moil",
+                "cum12mgas",
+                "cum12mwater",
+            ],
+            "cols_to_impute_with_mean": [
+                "spuddate",
+                "cum12moil",
+                "cum12mgas",
+                "cum12mwater",
+            ],
+            "cols_to_impute_with_mode": [
+                "direction",
+                "welltype",
+                "basin",
+                "subbasin",
+                "state",
+                "county",
+            ],
+            "cols_to_sort_by": ["api10"],
+        },
+    )
+    silver_df = silver_pipeline.run(df=bronze_df)
 
     # save data to file
-    if output_local and not os.path.exists("data"):
-        os.makedirs("data")
-        bronze_df.to_csv("data/" + output_filename, date_format="%Y-%m-%d")
+    if output_local:
+        if not os.path.exists("data"):
+            os.makedirs("data")
+        silver_df.to_csv("data/" + output_filename, date_format="%Y-%m-%d")
     else:
         # TODO: Write data to S3
         pass
