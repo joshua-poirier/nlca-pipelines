@@ -97,7 +97,12 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
 
     # create and run silver pipeline
     silver_pipeline = SilverPipeline(
-        steps=["parse_json", "filter_missing", "eliminate_invalid_values"],
+        steps=[
+            "parse_json",
+            "filter_missing",
+            "eliminate_invalid_values",
+            "impute_with_mean",
+        ],
         options={
             "cols_to_filter_missing": ["api10"],
             "cols_to_elim_invalid_values": [
@@ -111,6 +116,9 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
                 "cum12moil",
                 "cum12mgas",
                 "cum12mwater",
+            ],
+            "cols_to_impute_with_mean": [
+                "spuddate", "cum12moil", "cum12mgas", "cum12mwater"
             ],
         },
     )
