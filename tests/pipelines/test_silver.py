@@ -44,6 +44,8 @@ def test_filter_missing(bronze_df: pd.DataFrame) -> None:
         pytest.param("subbasin", "invalid", None),
         pytest.param("state", "Texas ", "TEXAS"),
         pytest.param("state", "oklahoma ", None),
+        pytest.param("county", "pecos", "PECOS"),
+        pytest.param("county", "invalid", None),
     ],
 )
 def test_eliminate_values(col: str, value: str, expected: str) -> None:
