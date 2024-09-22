@@ -139,7 +139,7 @@ def validate(
                         f"Missing required options: {', '.join(required_opts)}"
                     )
 
-                return func(df, *args, **kwargs)
+                return func(self, df, *args, **kwargs)
 
         return wrapper
 
