@@ -118,7 +118,10 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
                 "cum12mwater",
             ],
             "cols_to_impute_with_mean": [
-                "spuddate", "cum12moil", "cum12mgas", "cum12mwater"
+                "spuddate",
+                "cum12moil",
+                "cum12mgas",
+                "cum12mwater",
             ],
         },
     )
