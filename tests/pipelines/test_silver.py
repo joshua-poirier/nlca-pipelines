@@ -48,7 +48,7 @@ def test_filter_missing(bronze_df: pd.DataFrame) -> None:
         pytest.param("county", "invalid", None),
     ],
 )
-def test_eliminate_values(col: str, value: str, expected: str) -> None:
+def test_eliminate_invalid_values(col: str, value: str, expected: str) -> None:
     """Testing the `eliminate_invalid_values` method."""
     df: pd.DataFrame = pd.DataFrame({col: [value]})
     pipeline = SilverPipeline(
