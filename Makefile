@@ -31,7 +31,7 @@ format:
 
 .PHONY: test
 test:
-	pipenv run pytest tests
+	pipenv run pytest -x --nf tests
 
 .PHONY: docs
 docs:
