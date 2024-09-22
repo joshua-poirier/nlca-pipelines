@@ -36,9 +36,14 @@ def test_filter_missing(bronze_df: pd.DataFrame) -> None:
         pytest.param("direction", "", None),
         pytest.param("welltype", "oil", "OIL"),
         pytest.param("welltype", "Gas ", "GAS"),
+        pytest.param("welltype", "invalid", None),
         pytest.param("basin", "Anadarko", "ANADARKO"),
         pytest.param("basin", "PERMIAN ", "PERMIAN"),
+        pytest.param("basin", "invalid", None),
         pytest.param("subbasin", "Central Eagle Ford", "CENTRAL EAGLE FORD"),
+        pytest.param("subbasin", "invalid", None),
+        pytest.param("state", "Texas ", "TEXAS"),
+        pytest.param("state", "oklahoma ", None),
     ],
 )
 def test_eliminate_values(col: str, value: str, expected: str) -> None:
