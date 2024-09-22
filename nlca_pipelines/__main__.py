@@ -102,6 +102,7 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
             "filter_missing",
             "eliminate_invalid_values",
             "impute_with_mean",
+            "impute_with_mode",
         ],
         options={
             "cols_to_filter_missing": ["api10"],
@@ -123,6 +124,14 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
                 "cum12mgas",
                 "cum12mwater",
             ],
+            "cols_to_impute_with_mode": [
+                "direction",
+                "welltype",
+                "basin",
+                "subbasin",
+                "state",
+                "county",
+            ]
         },
     )
     silver_df = silver_pipeline.run(df=bronze_df)
