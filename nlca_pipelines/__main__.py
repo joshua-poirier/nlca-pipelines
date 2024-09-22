@@ -13,6 +13,8 @@ import click
 import pandas as pd
 from data_access.sources.google_drive import GoogleDriveClient
 
+from .pipelines import BronzePipeline
+
 
 @click.group(name="cli")
 def cli() -> None:
@@ -61,17 +63,37 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
         # Run the application, outputting remotely
         (nlca-pipeliens) $ python -m nlca_pipelines main --input-filename "novi-data-engineer-assignment.csv"
     """
-    client = GoogleDriveClient(io_options={"encoding": "utf-8", "header": 0})
-    client.get_file_id(filename=input_filename)
-
     # stream data into dataframe
+    client = GoogleDriveClient(
+        io_options={"encoding": "utf-8", "header": 0, "dtype": str}
+    )
+    client.get_file_id(filename=input_filename)
     df: pd.DataFrame = client.read()
-    df.head()
+
+    # create and run bronze pipeline
+    bronze_pipeline = BronzePipeline(
+        steps=[
+            "serialize_rows",
+            "add_source_name",
+            "add_source_uri",
+            "add_row_number",
+            "add_source_updated_at",
+            "add_id",
+        ],
+        options={
+            "skiprows": 1,
+            "source_created_at": client.source_created_at,
+            "source_name": client.source_filename,
+            "source_uri": client.source_uri,
+            "source_updated_at": client.source_updated_at,
+        },
+    )
+    bronze_df = bronze_pipeline.run(df=df)
 
     # save data to file
     if output_local and not os.path.exists("data"):
         os.makedirs("data")
-        df.to_csv("data/" + output_filename, date_format="%Y-%m-%d")
+        bronze_df.to_csv("data/" + output_filename, date_format="%Y-%m-%d")
     else:
         # TODO: Write data to S3
         pass
