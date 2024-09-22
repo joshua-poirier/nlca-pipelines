@@ -99,3 +99,19 @@ def test_impute_with_mode() -> None:
     actual: pd.DataFrame = pipeline.run(df=df)
 
     assert actual["A"].iloc[7] == 1
+
+
+def test_sort() -> None:
+    """Testing the `sort` method."""
+    df: pd.DataFrame = pd.DataFrame({"A": [1, 2, 1, 3]})
+    pipeline = SilverPipeline(
+        steps=["sort"],
+        options={"cols_to_sort_by": ["A"]},
+    )
+
+    actual: pd.DataFrame = pipeline.run(df=df)
+
+    assert actual["A"].iloc[0] == 1
+    assert actual["A"].iloc[1] == 1
+    assert actual["A"].iloc[2] == 2
+    assert actual["A"].iloc[3] == 3

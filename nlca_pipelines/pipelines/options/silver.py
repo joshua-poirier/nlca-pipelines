@@ -15,9 +15,12 @@ class SilverPipelineOptionsDict(TypedDict, total=False):
             missing values with the mean.
         cols_to_impute_with_mode (List[str]): List of columns to impute
             missing values with the mode.
+        cols_to_sort_by (List[str]): List of columns to sort the
+            dataframe by in ascending order.
     """
 
     cols_to_elim_invalid_values: List[str]
     cols_to_filter_missing: List[str]
     cols_to_impute_with_mean: List[str]
     cols_to_impute_with_mode: List[str]
+    cols_to_sort_by: List[str]

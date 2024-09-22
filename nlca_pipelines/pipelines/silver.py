@@ -147,3 +147,15 @@ class SilverPipeline(BasePipeline):
             df[col] = df[col].fillna(df[col].mode()[0])
 
         return df
+
+    def sort(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Sort by the values.
+
+        Args:
+            df (pd.DataFrame): Input data.
+
+        Returns:
+            pd.DataFrame: Output data, sorted in ascending order by the
+                given columns.
+        """
+        return df.sort_values(by=self.options["cols_to_sort_by"])
