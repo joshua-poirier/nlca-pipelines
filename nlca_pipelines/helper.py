@@ -1,11 +1,18 @@
-# pylint: disable=missing-function-docstring
-
 from data_access.sources import GoogleDriveClient
 
 from .pipelines import BronzePipeline, SilverPipeline
 
 
 def create_bronze_pipeline(google_drive_client: GoogleDriveClient) -> BronzePipeline:
+    """Helper function to create bronze pipeline.
+
+    Args:
+        google_drive_client (GoogleDriveClient): Client to interact with
+            data files hosted on Google Drive.
+
+    Returns:
+        BronzePipeline: A configured bronze pipeline object.
+    """
     return BronzePipeline(
         steps=[
             "serialize_rows",
@@ -26,6 +33,11 @@ def create_bronze_pipeline(google_drive_client: GoogleDriveClient) -> BronzePipe
 
 
 def create_silver_pipeline() -> SilverPipeline:
+    """Helper function to create silver pipeline.
+
+    Returns:
+        SilverPipeline: A configured silver pipeline object.
+    """
     return SilverPipeline(
         steps=[
             "parse_json",
