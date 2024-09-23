@@ -144,9 +144,13 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
             os.makedirs("data")
         silver_df.to_csv("data/" + output_filename, date_format="%Y-%m-%d")
     else:
-        s3_client = S3Client()
-        s3_client.write(df=bronze_df, bucket="nlca-bronze", filename=output_filename)
-        s3_client.write(df=silver_df, bucket="nlca-silver", filename=output_filename)
+        s3_client = S3Client(io_options={"date_format": "%Y-%m-%d", "index": False})
+        s3_client.write(
+            df=bronze_df, bucket="nlca-bronze", filename="data/" + output_filename
+        )
+        s3_client.write(
+            df=silver_df, bucket="nlca-silver", filename="data/" + output_filename
+        )
 
 
 if __name__ == "__main__":
