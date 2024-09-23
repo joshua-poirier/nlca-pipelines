@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0062eb047bea5f9907991012b7675350c5fcea5c68bf3d9aee5e7781fc9c27a2"
+            "sha256": "59de9f82ac36a9040e01f7d0e7d87691d833124b15e910a265754e5fe2dffddc"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -35,7 +35,7 @@
         "data-access": {
             "editable": true,
             "git": "https://github.com/joshua-poirier/data-access.git",
-            "ref": "7feb639f82759b47ec6d68bf587791bc440ed819"
+            "ref": "7ab8688922e0c277930d93df9aec69a513934069"
         },
         "numpy": {
             "hashes": [
@@ -247,7 +247,7 @@
                 "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3",
                 "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.9.0.post0"
         },
         "python-dotenv": {
@@ -270,7 +270,7 @@
                 "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
                 "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.16.0"
         },
         "typing-extensions": {

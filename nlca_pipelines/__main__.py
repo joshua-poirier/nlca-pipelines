@@ -11,7 +11,7 @@ import os
 
 import click
 import pandas as pd
-from data_access.sources.google_drive import GoogleDriveClient
+from data_access.sources import GoogleDriveClient, S3Client
 
 from .pipelines import BronzePipeline, SilverPipeline
 
@@ -64,7 +64,7 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
         (nlca-pipeliens) $ python -m nlca_pipelines main --input-filename "novi-data-engineer-assignment.csv"
     """
     # stream data into dataframe
-    client = GoogleDriveClient(
+    google_drive_client = GoogleDriveClient(
         io_options={
             "encoding": "utf-8",
             "header": 0,
@@ -72,8 +72,8 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
             "keep_default_na": False,
         }
     )
-    client.get_file_id(filename=input_filename)
-    raw_df: pd.DataFrame = client.read()
+    google_drive_client.get_file_id(filename=input_filename)
+    raw_df: pd.DataFrame = google_drive_client.read()
 
     # create and run bronze pipeline
     bronze_pipeline = BronzePipeline(
@@ -87,10 +87,10 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
         ],
         options={
             "skiprows": 1,
-            "source_created_at": client.source_created_at,
-            "source_name": client.source_filename,
-            "source_uri": client.source_uri,
-            "source_updated_at": client.source_updated_at,
+            "source_created_at": google_drive_client.source_created_at,
+            "source_name": google_drive_client.source_filename,
+            "source_uri": google_drive_client.source_uri,
+            "source_updated_at": google_drive_client.source_updated_at,
         },
     )
     bronze_df = bronze_pipeline.run(df=raw_df)
@@ -144,8 +144,9 @@ def main(input_filename: str, output_filename: str, output_local: bool) -> None:
             os.makedirs("data")
         silver_df.to_csv("data/" + output_filename, date_format="%Y-%m-%d")
     else:
-        # TODO: Write data to S3
-        pass
+        s3_client = S3Client()
+        s3_client.write(df=bronze_df, bucket="nlca-bronze", filename=output_filename)
+        s3_client.write(df=silver_df, bucket="nlca-silver", filename=output_filename)
 
 
 if __name__ == "__main__":
