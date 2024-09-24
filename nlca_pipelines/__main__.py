@@ -13,9 +13,12 @@ from typing import Any, Dict
 import click
 import pandas as pd
 from data_access.sources import GoogleDriveClient, S3Client
+from dotenv import load_dotenv
 
 from .helper import create_bronze_pipeline, create_silver_pipeline
 from .pipelines import BronzePipeline, SilverPipeline
+
+load_dotenv(".envrc")
 
 
 @click.group(name="cli")
