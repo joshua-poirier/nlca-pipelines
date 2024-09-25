@@ -1,5 +1,4 @@
-GIT_HASH ?= $(shell git log --format="%h" -n 1)
-IMAGE_TAG = ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_ECR_REPOSITORY}:${GIT_HASH}
+IMAGE_TAG = ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_ECR_REPOSITORY}:latest
 
 .PHONY: init
 init:
@@ -54,14 +53,11 @@ ecr_login:
 
 .PHONY: build
 build:
-	docker build \
-		--tag ${IMAGE_TAG} \
-		.
+	docker build --tag ${IMAGE_TAG} .
 
 .PHONY: push
 push:
-	docker push \
-		${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_ECR_REPOSITORY}:${GIT_HASH}
+	docker push ${IMAGE_TAG}
 
 .PHONY: start
 start:
