@@ -31,6 +31,8 @@ resource "aws_iam_policy" "ecs_task_execution_policy" {
         Action = [
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ]
