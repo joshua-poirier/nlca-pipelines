@@ -69,6 +69,13 @@ resource "aws_security_group" "ecs_service" {
   description = "Security group for ECS tasks"
   vpc_id = aws_default_vpc.default_vpc.id
 
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -84,9 +91,11 @@ resource "aws_ecs_task_definition" "pipeline_task" {
   cpu                      = "256"
   memory                   = "512"
 
+  execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
+
   container_definitions = jsonencode([
     {
-      name      = "pipeline"
+      name      = "pipeline-container"
       image     = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/nlca/nlca-pipelines:latest"
       essential = true
       portMappings = [
